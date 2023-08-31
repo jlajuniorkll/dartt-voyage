@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "602586244203",
+    "project_id": "dartt-voyage",
+    "storage_bucket": "dartt-voyage.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:602586244203:android:fb0729f9c924941273bd2e",
+        "android_client_info": {
+          "package_name": "com.example.dartt_voyage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "602586244203-gtedka5p9tfaimecsjlopgoudqn6br4u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDM0qBxWep3bLXx92xnlT5Rmf78qgYFVQo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "602586244203-gtedka5p9tfaimecsjlopgoudqn6br4u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "602586244203-eb3ek92jfv1ea3lj88kp8iu9kjaubbtv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.darttVoyage.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
