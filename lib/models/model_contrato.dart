@@ -1,10 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartt_voyage/models/model_cliente.dart';
 import 'package:dartt_voyage/models/model_modelo.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'model_contrato.g.dart';
-
-@JsonSerializable()
 class ContratoModel {
   String? id;
   ClienteModel? cliente;
@@ -16,7 +13,7 @@ class ContratoModel {
   String? latitude;
   String? longitude;
   String? imagemAssinatura;
-  String? status;
+  String status;
 
   ContratoModel(
       {this.id,
@@ -29,10 +26,50 @@ class ContratoModel {
       this.latitude,
       this.longitude,
       this.imagemAssinatura,
-      this.status});
+      this.status = "A"});
 
-  factory ContratoModel.fromJson(Map<String, dynamic> json) =>
-      _$ContratoModelFromJson(json);
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'id': id,
+      'cliente': cliente?.toJson2(),
+      'modelo': modelo?.toJson(),
+      'dataAssinatura': dataAssinatura,
+      'dataValidade': dataValidade,
+      'ip': ip,
+      'browser': browser,
+      'latitude': latitude,
+      'longitude': longitude,
+      'imagemAssinatura': imagemAssinatura,
+      'status': status,
+    };
 
-  Map<String, dynamic> toJson() => _$ContratoModelToJson(this);
+    data.removeWhere((_, value) => value == null);
+
+    return data;
+  }
+
+  factory ContratoModel.fromJson(Map<String, dynamic> json) {
+    return ContratoModel(
+        id: json['id'],
+        cliente: json['cliente'] != null
+            ? ClienteModel.fromJson(json['cliente'])
+            : null,
+        modelo: json['modelo'] != null
+            ? ModeloModel.fromJson(json['modelo'])
+            : null,
+        dataAssinatura: json['dataAssinatura'],
+        dataValidade: json['dataValidade'],
+        ip: json['ip'],
+        browser: json['browser'],
+        latitude: json['latitude'],
+        longitude: json['longitude'],
+        imagemAssinatura: json['imagemAssinatura'],
+        status: json['status']);
+  }
+
+  factory ContratoModel.fromDocument(DocumentSnapshot doc) {
+    final data = doc.data()! as Map<String, dynamic>;
+    data.putIfAbsent('id', () => doc.id);
+    return ContratoModel.fromJson(data);
+  }
 }

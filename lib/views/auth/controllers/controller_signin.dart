@@ -14,15 +14,17 @@ class SignInController extends GetxController {
     update();
   }
 
-  Future<bool> signIn({required ClienteModel cliente}) async {
-    bool loginSucesso = false;
-
+  Future<void> signIn({required ClienteModel cliente}) async {
     AuthResult<ClienteModel> result =
         await authRepository.signIn(cliente: cliente);
 
     result.when(success: (data) {
       setClienteLogado(data);
-      Get.offNamed(PageRoutes.home);
+      if (data.typeUser == "Administrador") {
+        Get.offNamed(PageRoutes.home);
+      } else {
+        Get.offNamed(PageRoutes.homeCliente);
+      }
     }, error: (message) {
       Get.snackbar(
         "Tente novamente",
@@ -35,6 +37,5 @@ class SignInController extends GetxController {
         barBlur: 0,
       );
     });
-    return loginSucesso;
   }
 }

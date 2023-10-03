@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartt_voyage/models/model_cliente.dart';
 import 'package:dartt_voyage/views/auth/controllers/controller_signup.dart';
 import 'package:dartt_voyage/views/common/cliente_steeper/component/screen_confirm.dart';
@@ -6,18 +8,41 @@ import 'package:dartt_voyage/views/common/cliente_steeper/component/screen_ender
 import 'package:dartt_voyage/views/common/cliente_steeper/component/screen_filiacao.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class ControllerSteeper extends GetxController {
   int currentStep = 0;
+  bool formAdm = false;
 
   ClienteModel cliente = ClienteModel();
   final GlobalKey<FormState> formKeyDados = GlobalKey<FormState>();
   final GlobalKey<FormState> formKeyEndereco = GlobalKey<FormState>();
   final GlobalKey<FormState> formKeyFiliacao = GlobalKey<FormState>();
   final GlobalKey<FormState> formKeyConfirm = GlobalKey<FormState>();
+  TextEditingController nomeController = TextEditingController();
+  TextEditingController rgController = TextEditingController();
+  TextEditingController cpfController = TextEditingController();
+  TextEditingController nascimentoController = TextEditingController();
+  TextEditingController cepController = TextEditingController();
+  TextEditingController logradouroController = TextEditingController();
+  TextEditingController bairroController = TextEditingController();
+  TextEditingController cidadeController = TextEditingController();
+  TextEditingController estadoController = TextEditingController();
+  TextEditingController paiController = TextEditingController();
+  TextEditingController maeController = TextEditingController();
+  TextEditingController foneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController senhaController = TextEditingController();
+  TextEditingController complementoController = TextEditingController();
+  TextEditingController confirmController = TextEditingController();
 
   void setCivilOcurrency(String value) {
     cliente.civil = value;
+    update();
+  }
+
+  void setTypeUser(String value) {
+    cliente.typeUser = value;
     update();
   }
 
@@ -30,12 +55,26 @@ class ControllerSteeper extends GetxController {
     update();
   }
 
+  void zeraPage() {
+    formKeyDados.currentState!.reset();
+    formKeyEndereco.currentState!.reset();
+    formKeyFiliacao.currentState!.reset();
+    formKeyConfirm.currentState!.reset();
+    currentStep = 0;
+    update();
+  }
+
+  void setFormAdm(bool value) {
+    formAdm = value;
+    update();
+  }
+
   void previewPage() {
     currentStep--;
     update();
   }
 
-  void validaForms({int? index}) {
+  void validaForms({int? index, required bool formAdm}) {
     switch (currentStep) {
       case 0:
         if (formKeyDados.currentState!.validate()) {
@@ -60,7 +99,7 @@ class ControllerSteeper extends GetxController {
         if (formKeyConfirm.currentState!.validate()) {
           formKeyConfirm.currentState!.save();
           Get.find<SignUpController>()
-              .addCliente(cliente: cliente, signinForm: true);
+              .addCliente(cliente: cliente, formAdm: formAdm);
         }
         break;
     }
@@ -85,8 +124,60 @@ class ControllerSteeper extends GetxController {
           state: currentStep > 2 ? StepState.complete : StepState.indexed),
       Step(
           title: const Text('Confirmação'),
-          content: const ConfirmScreen(),
+          content: ConfirmScreen(formAdm: formAdm),
           isActive: currentStep >= 3),
     ];
+  }
+
+  Future<Map<String, dynamic>> fecthCep({required String cep}) async {
+    try {
+      final response =
+          await http.get(Uri.parse('https://viacep.com.br/ws/$cep/json/'));
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        final notCNPJ = jsonEncode({"erro": true});
+        return json.decode(notCNPJ);
+        // throw Exception('Não foi possível buscar o Cep!');
+      }
+    } catch (e) {
+      final notCNPJ = jsonEncode({"erro": true});
+      return json.decode(notCNPJ);
+    }
+  }
+
+  void setEnderecoCEP(Map<String, dynamic> endereco) {
+    logradouroController.text = endereco['logradouro'] as String;
+    bairroController.text = endereco['bairro'] as String;
+    cidadeController.text = endereco['localidade'] as String;
+    estadoController.text = endereco['uf'] as String;
+    update();
+  }
+
+  void limpaEnderecoCEP() {
+    logradouroController.text = '';
+    bairroController.text = '';
+    cidadeController.text = '';
+    estadoController.text = '';
+    update();
+  }
+
+  void setClientEdit(ClienteModel cliente) {
+    nomeController.text = cliente.nome!;
+    rgController.text = cliente.rg!;
+    cpfController.text = cliente.cpf!;
+    nascimentoController.text = cliente.nasc!;
+    cepController.text = cliente.cep!;
+    logradouroController.text = cliente.endereco!;
+    complementoController.text = cliente.complemento!;
+    bairroController.text = cliente.bairro!;
+    cidadeController.text = cliente.cidade!;
+    estadoController.text = cliente.uf!;
+    paiController.text = cliente.pai!;
+    maeController.text = cliente.mae!;
+    foneController.text = cliente.fone!;
+    emailController.text = cliente.email!;
+    senhaController.text = cliente.senha!;
+    confirmController.text = cliente.senhaConfirm!;
   }
 }

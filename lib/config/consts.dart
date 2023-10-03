@@ -5,3 +5,5 @@ final List<String> listCivil = <String>[
   'União Estável',
   'Viúvo(a)'
 ];
+
+final List<String> listTypeUser = <String>['Administrador', 'Cliente'];

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'model_modelo.g.dart';
@@ -18,4 +19,10 @@ class ModeloModel {
       _$ModeloModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ModeloModelToJson(this);
+
+  factory ModeloModel.fromDocument(DocumentSnapshot doc) {
+    final data = doc.data()! as Map<String, dynamic>;
+    data.putIfAbsent('id', () => doc.id);
+    return ModeloModel.fromJson(data);
+  }
 }

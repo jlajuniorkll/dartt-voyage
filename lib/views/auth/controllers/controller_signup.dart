@@ -1,6 +1,8 @@
 import 'package:dartt_voyage/models/model_cliente.dart';
 import 'package:dartt_voyage/views/auth/controllers/controller_signin.dart';
 import 'package:dartt_voyage/views/auth/repository/auth_repository.dart';
+import 'package:dartt_voyage/views/common/cliente_steeper/controller/controller_steeper.dart';
+import 'package:dartt_voyage/views/home/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,11 +10,9 @@ class SignUpController extends GetxController {
   final authRepository = AuthRepository();
 
   Future<void> addCliente(
-      {required ClienteModel cliente, bool signinForm = false}) async {
-    if (signinForm) {
+      {required ClienteModel cliente, bool formAdm = false}) async {
+    if (!formAdm) {
       cliente.typeUser = "Cliente";
-    } else {
-      cliente.typeUser = "Administrador";
     }
 
     final resultSignup = await authRepository.signUp(cliente: cliente);
@@ -25,8 +25,12 @@ class SignUpController extends GetxController {
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 3),
             margin: const EdgeInsets.only(bottom: 8));
-        if (signinForm) {
+        if (!formAdm) {
           Get.find<SignInController>().signIn(cliente: cliente);
+        } else {
+          Get.find<ControllerSteeper>().zeraPage();
+          Get.find<HomeController>().getAllUser();
+          Get.find<HomeController>().update();
         }
       },
       error: (message) {

@@ -35,15 +35,16 @@ class SigninScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Image.asset(
-                      'images/logo.jpg',
+                      'assets/images/logo.jpg',
                       width: 150,
                       height: 150,
                     ),
                     TextFormField(
-                        validator: emailValidator,
+                        validator: emailAndPhoneValidator,
                         onSaved: ((newValue) =>
                             emailController.text = newValue!),
-                        decoration: const InputDecoration(hintText: 'Email')),
+                        decoration: const InputDecoration(
+                            hintText: 'Telefone ou Email')),
                     TextFormField(
                         validator: senhaValidator,
                         onSaved: ((newValue) =>
@@ -60,13 +61,10 @@ class SigninScreen extends StatelessWidget {
                         onPressed: () async {
                           if (formKey.currentState!.validate()) {
                             formKey.currentState!.save();
-                            final result = await controller.signIn(
+                            await controller.signIn(
                                 cliente: ClienteModel(
                                     email: emailController.text.toLowerCase(),
                                     senha: senhaController.text));
-                            if (result) {
-                              Get.offNamed(PageRoutes.home);
-                            }
                           }
                         },
                         style: ElevatedButton.styleFrom(

@@ -2,11 +2,34 @@ import 'package:get/get.dart';
 
 String? emailValidator(String? email) {
   if (email == null || email.isEmpty) {
-    return 'Digite seu e-mail';
-  } else if (!email.isEmail) {
-    return 'Digite um email válido';
-  } else {
     return null;
+  } else {
+    if (!email.isEmail) {
+      return 'Digite um email válido!';
+    } else {
+      return null;
+    }
+  }
+}
+
+String? emailAndPhoneValidator(String? value) {
+  // ignore: unnecessary_null_comparison
+  if (value == null || value.isEmpty) {
+    return 'Digite seu e-mail ou telefone';
+  } else {
+    if (value.contains("@")) {
+      if (!value.isEmail) {
+        return 'Email inválido!';
+      } else {
+        return null;
+      }
+    } else {
+      if (!value.isPhoneNumber || value.length < 10) {
+        return 'Digite um telefone válido';
+      } else {
+        return null;
+      }
+    }
   }
 }
 

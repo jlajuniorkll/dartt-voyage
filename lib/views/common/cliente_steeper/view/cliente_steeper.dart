@@ -2,8 +2,10 @@ import 'package:dartt_voyage/views/common/cliente_steeper/controller/controller_
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// ignore: must_be_immutable
 class ClienteSteeper extends StatelessWidget {
-  const ClienteSteeper({super.key});
+  ClienteSteeper({super.key, required this.formAdm});
+  bool formAdm;
 
   @override
   Widget build(BuildContext context) {
@@ -11,12 +13,14 @@ class ClienteSteeper extends StatelessWidget {
       return Stepper(
           currentStep: controller.currentStep,
           onStepContinue: () {
-            controller.validaForms();
+            controller.setFormAdm(formAdm);
+            controller.validaForms(formAdm: formAdm);
           },
           onStepCancel: () =>
               controller.currentStep <= 0 ? null : controller.previewPage(),
           onStepTapped: (index) {
-            controller.validaForms(index: index);
+            controller.setFormAdm(formAdm);
+            controller.validaForms(index: index, formAdm: formAdm);
           },
           controlsBuilder: (BuildContext context, ControlsDetails details) {
             return Padding(

@@ -1,0 +1,22 @@
+import 'package:dartt_voyage/views/common/cliente_steeper/view/cliente_steeper.dart';
+import 'package:flutter/material.dart';
+
+// ignore: must_be_immutable
+class SignUpScreen extends StatelessWidget {
+  SignUpScreen({super.key, required this.title, required this.formAdm});
+
+  String title;
+  bool formAdm;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+          centerTitle: true,
+        ),
+        body: Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: ClienteSteeper(formAdm: formAdm)));
+  }
+}

@@ -18,23 +18,27 @@ class DadosScreen extends StatelessWidget {
             child: Column(
               children: [
                 TextFormField(
+                  controller: controller.nomeController,
                   onSaved: ((newValue) => controller.cliente.nome = newValue!),
                   decoration: const InputDecoration(hintText: 'Nome'),
                   validator: nameValidator,
                 ),
                 TextFormField(
+                  controller: controller.rgController,
                   onSaved: ((newValue) => controller.cliente.rg = newValue!),
                   decoration: const InputDecoration(hintText: 'RG'),
                   validator: rgValidator,
                   inputFormatters: [utilServices.rgFormatter],
                 ),
                 TextFormField(
+                  controller: controller.cpfController,
                   onSaved: ((newValue) => controller.cliente.cpf = newValue!),
                   decoration: const InputDecoration(hintText: 'CPF'),
                   validator: cpfValidator,
                   inputFormatters: [utilServices.cpfFormatter],
                 ),
                 TextFormField(
+                  controller: controller.nascimentoController,
                   onSaved: ((newValue) => controller.cliente.nasc = newValue!),
                   decoration:
                       const InputDecoration(hintText: 'Data Nascimento'),

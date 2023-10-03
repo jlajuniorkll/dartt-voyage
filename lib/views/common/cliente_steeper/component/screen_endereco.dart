@@ -18,12 +18,34 @@ class EnderecoScreen extends StatelessWidget {
             child: Column(
               children: [
                 TextFormField(
+                  controller: controller.cepController,
                   onSaved: ((newValue) => controller.cliente.cep = newValue!),
                   decoration: const InputDecoration(hintText: 'CEP'),
                   validator: cepValidator,
                   inputFormatters: [utilServices.cepFormatter],
+                  onChanged: (value) async {
+                    if (value.length == 9) {
+                      final cepUnmasked =
+                          utilServices.cepFormatter.getUnmaskedText();
+                      var cepEncontrado =
+                          await controller.fecthCep(cep: cepUnmasked);
+                      if (cepEncontrado['erro'] == true) {
+                        controller.limpaEnderecoCEP();
+                        Get.snackbar(
+                            'Erro!', "Erro ao localizar o CEP informado!",
+                            snackPosition: SnackPosition.BOTTOM,
+                            colorText: Colors.white,
+                            backgroundColor: Colors.red,
+                            duration: const Duration(seconds: 3),
+                            margin: const EdgeInsets.only(bottom: 8));
+                      } else {
+                        controller.setEnderecoCEP(cepEncontrado);
+                      }
+                    }
+                  },
                 ),
                 TextFormField(
+                  controller: controller.logradouroController,
                   onSaved: ((newValue) =>
                       controller.cliente.endereco = newValue!),
                   decoration: const InputDecoration(hintText: 'Endereco'),
@@ -37,17 +59,25 @@ class EnderecoScreen extends StatelessWidget {
                 ),
                 TextFormField(
                   onSaved: ((newValue) =>
+                      controller.cliente.complemento = newValue!),
+                  decoration: const InputDecoration(hintText: 'Complemento'),
+                ),
+                TextFormField(
+                  controller: controller.bairroController,
+                  onSaved: ((newValue) =>
                       controller.cliente.bairro = newValue!),
                   decoration: const InputDecoration(hintText: 'Bairro'),
                   validator: bairroValidator,
                 ),
                 TextFormField(
+                  controller: controller.cidadeController,
                   onSaved: ((newValue) =>
                       controller.cliente.cidade = newValue!),
                   decoration: const InputDecoration(hintText: 'Cidade'),
                   validator: cidadeValidator,
                 ),
                 TextFormField(
+                  controller: controller.estadoController,
                   onSaved: ((newValue) => controller.cliente.uf = newValue!),
                   decoration: const InputDecoration(hintText: 'UF'),
                   validator: estadoValidator,

@@ -55,11 +55,13 @@ class ScreenFiliacao extends StatelessWidget {
                   height: 12,
                 ),
                 TextFormField(
+                  controller: controller.paiController,
                   onSaved: ((newValue) => controller.cliente.pai = newValue!),
                   decoration: const InputDecoration(hintText: 'Nome do Pai'),
                   validator: nameValidator,
                 ),
                 TextFormField(
+                  controller: controller.maeController,
                   onSaved: ((newValue) => controller.cliente.mae = newValue!),
                   decoration: const InputDecoration(hintText: 'Nome da Mãe'),
                   validator: nameValidator,
