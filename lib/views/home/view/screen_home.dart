@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
             body: <Widget>[
               const WidgetHome(),
               const ModeloScreen(),
-              SignUpScreen(title: 'Novo Cliente', formAdm: true),
+              SignUpScreen(title: 'Novo Usuário', formAdm: true),
             ][controller.currentPageIndex],
             bottomNavigationBar: NavigationBar(
               onDestinationSelected: (int index) {
@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
                 NavigationDestination(
                   selectedIcon: Icon(Icons.person),
                   icon: Icon(Icons.person_outline),
-                  label: 'Cliente',
+                  label: 'Usuários',
                 ),
               ],
             ));

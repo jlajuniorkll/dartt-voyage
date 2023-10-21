@@ -35,6 +35,7 @@ class ControllerSteeper extends GetxController {
   TextEditingController senhaController = TextEditingController();
   TextEditingController complementoController = TextEditingController();
   TextEditingController confirmController = TextEditingController();
+  TextEditingController numeroController = TextEditingController();
 
   void setCivilOcurrency(String value) {
     cliente.civil = value;
@@ -74,7 +75,8 @@ class ControllerSteeper extends GetxController {
     update();
   }
 
-  void validaForms({int? index, required bool formAdm}) {
+  void validaForms(
+      {int? index, required bool formAdm, ClienteModel? clienteModel}) {
     switch (currentStep) {
       case 0:
         if (formKeyDados.currentState!.validate()) {
@@ -98,8 +100,13 @@ class ControllerSteeper extends GetxController {
       case 3:
         if (formKeyConfirm.currentState!.validate()) {
           formKeyConfirm.currentState!.save();
-          Get.find<SignUpController>()
-              .addCliente(cliente: cliente, formAdm: formAdm);
+          if (clienteModel != null) {
+            Get.find<SignUpController>().updateCliente(clienteModel: cliente);
+          } else {
+            Get.find<SignUpController>()
+                .addCliente(cliente: cliente, formAdm: formAdm);
+          }
+          limpaTudo();
         }
         break;
     }
@@ -163,6 +170,9 @@ class ControllerSteeper extends GetxController {
   }
 
   void setClientEdit(ClienteModel cliente) {
+    if (cliente.id != null) {
+      cliente.id = cliente.id!;
+    }
     nomeController.text = cliente.nome!;
     rgController.text = cliente.rg!;
     cpfController.text = cliente.cpf!;
@@ -179,5 +189,28 @@ class ControllerSteeper extends GetxController {
     emailController.text = cliente.email!;
     senhaController.text = cliente.senha!;
     confirmController.text = cliente.senhaConfirm!;
+    numeroController.text = cliente.numero!;
+    setCivilOcurrency(cliente.civil!);
+  }
+
+  void limpaTudo() {
+    nomeController.text = "";
+    rgController.text = "";
+    cpfController.text = "";
+    nascimentoController.text = "";
+    cepController.text = "";
+    logradouroController.text = "";
+    bairroController.text = "";
+    cidadeController.text = "";
+    estadoController.text = "";
+    paiController.text = "";
+    maeController.text = "";
+    foneController.text = "";
+    emailController.text = "";
+    senhaController.text = "";
+    complementoController.text = "";
+    confirmController.text = "";
+    numeroController.text = "";
+    zeraPage();
   }
 }

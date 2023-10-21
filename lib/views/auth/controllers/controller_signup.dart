@@ -48,4 +48,8 @@ class SignUpController extends GetxController {
       },
     );
   }
+
+  Future<void> updateCliente({required ClienteModel clienteModel}) async {
+    await authRepository.updateCliente(clienteModel: clienteModel);
+  }
 }

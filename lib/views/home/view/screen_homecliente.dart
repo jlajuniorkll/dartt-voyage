@@ -28,7 +28,11 @@ class HomeClienteScreen extends StatelessWidget {
                       fontSize: 20,
                       color: Colors.black),
                 ),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
+                IconButton(
+                    onPressed: () {
+                      Get.find<SignInController>().signOut();
+                    },
+                    icon: const Icon(Icons.logout))
               ],
             ),
           ),

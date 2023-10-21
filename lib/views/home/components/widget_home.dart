@@ -1,8 +1,10 @@
 import 'package:dartt_voyage/views/auth/controllers/controller_signin.dart';
+import 'package:dartt_voyage/views/auth/view/screen_signup.dart';
 import 'package:dartt_voyage/views/home/components/cliente_tile.dart';
 import 'package:dartt_voyage/views/home/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 class WidgetHome extends StatelessWidget {
   const WidgetHome({super.key});
@@ -21,11 +23,26 @@ class WidgetHome extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Center(
-                child: Text(
-                  "Olá, ${userController.clienteLogado!.nome}",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 20),
+              Expanded(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                        "Olá, ${userController.clienteLogado!.nome}",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20,
+                            color: Colors.black),
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          userController.signOut();
+                        },
+                        icon: const Icon(Icons.logout))
+                  ],
                 ),
               ),
             ],
@@ -73,17 +90,44 @@ class WidgetHome extends StatelessWidget {
         ),
         GetBuilder<HomeController>(
           builder: (controller) {
-            return Expanded(
-              child: ListView.builder(
-                  padding: const EdgeInsets.all(16.0),
-                  itemCount: controller.allUserFiltered.length,
-                  itemBuilder: (_, index) {
-                    return GestureDetector(
-                      child: UserListTile(
-                          userReceived: controller.allUserFiltered[index]),
-                    );
-                  }),
-            );
+            return !controller.isLoadingAllUsers
+                ? Expanded(
+                    child: ListView.builder(
+                        padding: const EdgeInsets.all(16.0),
+                        itemCount: controller.allUserFiltered.length,
+                        itemBuilder: (_, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(SignUpScreen(
+                                title: 'Cadastre-se',
+                                formAdm: false,
+                                clienteModel: controller.allUserFiltered[index],
+                              ));
+                            },
+                            child: UserListTile(
+                                userReceived:
+                                    controller.allUserFiltered[index]),
+                          );
+                        }),
+                  )
+                : Expanded(
+                    child: ListView.builder(
+                        itemCount: 100,
+                        itemBuilder: (_, index) => SizedBox(
+                            width: 200.0,
+                            height: 100.0,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+                              child: Shimmer.fromColors(
+                                baseColor: Colors.red,
+                                highlightColor: Colors.yellow,
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                  color: Colors.white.withAlpha(50),
+                                  borderRadius: BorderRadius.circular(30),
+                                )),
+                              ),
+                            ))));
           },
         ),
       ]),

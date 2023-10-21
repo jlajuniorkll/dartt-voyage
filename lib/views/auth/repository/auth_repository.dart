@@ -51,8 +51,8 @@ class AuthRepository {
       {required ClienteModel cliente}) async {
     try {
       if (cliente.email == null || cliente.email!.isEmpty) {
-        final foneEmail = cliente.fone!.replaceAll(RegExp(r'[^\d]+'), '');
-        cliente.email = "$foneEmail@gdsviagemeturismo.com.br";
+        final cpfEmail = cliente.cpf!.replaceAll(RegExp(r'[^\d]+'), '');
+        cliente.email = "$cpfEmail@gdsviagemeturismo.com.br";
       }
       final resultEmail =
           await fireRef.where("email", isEqualTo: cliente.email).get();
@@ -76,6 +76,23 @@ class AuthRepository {
     // user.id = fireRef.doc().id; este recupera o id que foi salvo no firebase após persistir
     try {
       await fireRef.doc(cliente.id).set(cliente.toJson());
+    } catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+    }
+  }
+
+  Future<void> sendPasswordResetEmail(email) async {
+    await auth.sendPasswordResetEmail(email: email);
+  }
+
+  Future<void> signOut() async {
+    await auth.signOut();
+  }
+
+  Future<void> updateCliente({required ClienteModel clienteModel}) async {
+    try {
+      await fireRef.doc(clienteModel.id).update(clienteModel.toJson());
     } catch (e) {
       // ignore: avoid_print
       print(e.toString());

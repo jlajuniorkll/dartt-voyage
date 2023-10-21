@@ -21,6 +21,7 @@ class HomeController extends GetxController {
   final homeRepository = HomeRepository();
   int currentPageIndex = 0;
   List<MovimentoModel> allMove = [];
+  bool isLoadingAllUsers = true;
 
   @override
   void onInit() {
@@ -67,6 +68,11 @@ class HomeController extends GetxController {
     update();
   }
 
+  void setLoadingAllUsers(bool value) {
+    isLoadingAllUsers = value;
+    update();
+  }
+
   set searchUser(String value) {
     _searchUser = value;
     update();
@@ -86,6 +92,7 @@ class HomeController extends GetxController {
     } else {
       allUserFiltered.addAll(allUser);
     }
+    setLoadingAllUsers(false);
     update();
   }
 
@@ -102,6 +109,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> getAllUser() async {
+    setLoadingAllUsers(true);
     HomeResult<List<ClienteModel>> homeResult =
         await homeRepository.getAllUser();
     homeResult.when(success: (data) {

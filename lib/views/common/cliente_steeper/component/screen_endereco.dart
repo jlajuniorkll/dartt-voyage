@@ -52,12 +52,14 @@ class EnderecoScreen extends StatelessWidget {
                   validator: logradouroValidator,
                 ),
                 TextFormField(
+                  controller: controller.numeroController,
                   onSaved: ((newValue) =>
                       controller.cliente.numero = newValue!),
                   decoration: const InputDecoration(hintText: 'Número'),
                   validator: logradouroValidator,
                 ),
                 TextFormField(
+                  controller: controller.complementoController,
                   onSaved: ((newValue) =>
                       controller.cliente.complemento = newValue!),
                   decoration: const InputDecoration(hintText: 'Complemento'),

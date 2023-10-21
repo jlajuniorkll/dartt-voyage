@@ -2,6 +2,7 @@ import 'package:dartt_voyage/models/model_cliente.dart';
 import 'package:dartt_voyage/routes/app_routes.dart';
 import 'package:dartt_voyage/services/validators.dart';
 import 'package:dartt_voyage/views/auth/controllers/controller_signin.dart';
+import 'package:dartt_voyage/views/auth/view/reset.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -43,8 +44,8 @@ class SigninScreen extends StatelessWidget {
                         validator: emailAndPhoneValidator,
                         onSaved: ((newValue) =>
                             emailController.text = newValue!),
-                        decoration: const InputDecoration(
-                            hintText: 'Telefone ou Email')),
+                        decoration:
+                            const InputDecoration(hintText: 'CPF ou Email')),
                     TextFormField(
                         validator: senhaValidator,
                         onSaved: ((newValue) =>
@@ -80,7 +81,22 @@ class SigninScreen extends StatelessWidget {
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            controller.setSendUser(await showDialog(
+                                context: context,
+                                builder: (_) => ResetForm(
+                                      email: emailController.text,
+                                    )));
+                            if (controller.sendUser) {
+                              Get.snackbar('Sucesso!',
+                                  "Link de recuperação enviado para o seu email!",
+                                  snackPosition: SnackPosition.BOTTOM,
+                                  colorText: Colors.black,
+                                  backgroundColor: Colors.green,
+                                  duration: const Duration(seconds: 3),
+                                  margin: const EdgeInsets.only(bottom: 8));
+                            }
+                          },
                           child: const Text(
                             'Esqueceu a senha?',
                             style: TextStyle(),

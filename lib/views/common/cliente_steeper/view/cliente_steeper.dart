@@ -1,26 +1,33 @@
+import 'package:dartt_voyage/models/model_cliente.dart';
 import 'package:dartt_voyage/views/common/cliente_steeper/controller/controller_steeper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 // ignore: must_be_immutable
 class ClienteSteeper extends StatelessWidget {
-  ClienteSteeper({super.key, required this.formAdm});
+  ClienteSteeper({super.key, required this.formAdm, this.clienteModel});
   bool formAdm;
+  ClienteModel? clienteModel;
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ControllerSteeper>(builder: (controller) {
+      if (clienteModel != null) {
+        controller.setClientEdit(clienteModel!);
+      }
       return Stepper(
           currentStep: controller.currentStep,
           onStepContinue: () {
             controller.setFormAdm(formAdm);
-            controller.validaForms(formAdm: formAdm);
+            controller.validaForms(
+                formAdm: formAdm, clienteModel: clienteModel);
           },
           onStepCancel: () =>
               controller.currentStep <= 0 ? null : controller.previewPage(),
           onStepTapped: (index) {
             controller.setFormAdm(formAdm);
-            controller.validaForms(index: index, formAdm: formAdm);
+            controller.validaForms(
+                index: index, formAdm: formAdm, clienteModel: clienteModel);
           },
           controlsBuilder: (BuildContext context, ControlsDetails details) {
             return Padding(
@@ -48,7 +55,9 @@ class ClienteSteeper extends StatelessWidget {
                         onPressed: details.onStepContinue,
                         child: Text(controller.currentStep ==
                                 controller.buildStep().length - 1
-                            ? "Finalizar"
+                            ? clienteModel != null
+                                ? "Atualizar"
+                                : "Finalizar"
                             : "Próximo"),
                       ),
                     ))

@@ -8,9 +8,15 @@ import 'package:get/get.dart';
 class SignInController extends GetxController {
   final authRepository = AuthRepository();
   ClienteModel? clienteLogado;
+  bool sendUser = false;
 
   void setClienteLogado(ClienteModel value) {
     clienteLogado = value;
+    update();
+  }
+
+  void setSendUser(bool sendUserSet) {
+    sendUser = sendUserSet;
     update();
   }
 
@@ -37,5 +43,16 @@ class SignInController extends GetxController {
         barBlur: 0,
       );
     });
+  }
+
+  Future<void> resetUser(email) async {
+    await authRepository.sendPasswordResetEmail(email);
+  }
+
+  Future<void> signOut() async {
+    await authRepository.signOut();
+    clienteLogado = null;
+    Get.offNamed(PageRoutes.signin);
+    update();
   }
 }
